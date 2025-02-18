@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "nodemon",
     "start": "node public/index.js",
-    "build": "tsc && npx ncp welcome.html public/welcome.html",
+    "build": "tsc",
     "test": "jest",
     "test:e2e": "jest tests --forceExit --detectOpenHandles"
   },

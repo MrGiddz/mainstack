@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mongodb+srv://mideniyi:4oydc7Ia9NFdEOyy@cluster0.lebaf.mongodb.net/mainstack
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    restart: always
