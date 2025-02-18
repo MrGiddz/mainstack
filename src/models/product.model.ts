@@ -8,7 +8,7 @@ export interface Product extends Document {
 }
 
 export interface ProductModel extends Model<Product> {
-  findByOrIdName: (value: string) => Promise<Product | null>;
+  findByName: (name: string) => Promise<Product | null>;
   createProduct: (
     name: string,
     price: number,
@@ -26,7 +26,7 @@ export interface ProductModel extends Model<Product> {
   ) => Promise<Product | null>;
   deleteProduct: (id: string) => Promise<Product | null>;
   updateQuantity: (quantity: number) => Promise<Product>;
- 
+  findAll: () => Promise<Product[]>;
 }
 
 const productSchema = new Schema<Product>(
@@ -66,15 +66,22 @@ productSchema.methods.updateQuantity = async function (
 };
 
 // Static method to search a product by its name
-productSchema.statics.findByOrIdName = async function (
-  value: string
+productSchema.statics.findByName = async function (
+  name: string
 ): Promise<Product | null> {
-  const searchCriteria = mongoose.Types.ObjectId.isValid(value)
-    ? { _id: value }
-    : { name: value };
-
-  return this.findOne({ $or: [searchCriteria] });
+  return this.findOne({ name });
 };
+
+// Static method to fetch all products
+productSchema.statics.findAll = async function (): Promise<Product[]> {
+  try {
+    const products = await this.find();
+    return products;
+  } catch (error) {
+    throw new Error("Error fetching products: " + error);
+  }
+};
+
 
 // Static method to create a new product
 productSchema.statics.createProduct = async function (

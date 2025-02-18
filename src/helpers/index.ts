@@ -17,7 +17,7 @@ export function generateOtp(interval: number): { otp: string; expiresAt: Date } 
     .digest("hex");
 
   const otp = parseInt(hash.substring(0, 6), 16) % 1000000;
-  const expiresAt = new Date(Date.now() + interval * 60 * 1000);
+  const expiresAt = new Date(Math.floor(Date.now() + interval * 60 * 1000)); // Ensure precision
 
   return { otp: otp.toString().padStart(6, "0"), expiresAt };
 }

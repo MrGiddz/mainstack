@@ -78,7 +78,7 @@ try {
 }
 const server = http.createServer(app);
 
-server.listen(PORT || (Math.floor(Math.random() * (65535 - 1024)) + 1024), async () => {
+server.listen(PORT, async () => {
   logger.info(`App is running at http://localhost:${PORT}`);
 });
 

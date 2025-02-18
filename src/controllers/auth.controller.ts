@@ -46,7 +46,6 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body as User;
 
-
     if (!username || !password) {
       return res
         .status(HttpStatusCode.BadRequest)
@@ -74,7 +73,9 @@ export const login = async (req: Request, res: Response) => {
     return res.status(HttpStatusCode.Created).json({ user, ...tokens });
   } catch (error) {
     logger.error(error);
-    return res.sendStatus(400);
+    return res
+      .status(HttpStatusCode.InternalServerError)
+      .json({ error: "An Error occurred, please try again." });
   }
 };
 
@@ -88,21 +89,21 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
   }
 
   const user = await UserModel.findByEmail(email);
-  if (!user) return res.sendStatus(404);
+  if (!user) return res.sendStatus(HttpStatusCode.NotFound);
 
   const interval = 1;
   const otp = generateOtp(interval);
 
+  console.log({ otp });
+
   // save the otp
   await user.setPasswordResetToken(otp.otp, otp.expiresAt);
 
-
- await emailQueue.add("sendResetEmail", {
+  await emailQueue.add("sendResetEmail", {
     to: email,
     subject: "Reset Password",
     text: `Your password reset OTP: ${otp.otp}. OTP expires in ${interval} mins`,
   });
-
 
   return res.status(200).json({ message: "Password reset email sent." });
 };
