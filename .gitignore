@@ -1,0 +1,27 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Build output
+dist/
+build/
+api/
+public/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE settings
+.vscode/
+.idea/
+.vercel
+coverage/
+
+api.rest
